@@ -1,0 +1,20 @@
+{
+  "name": "status-notify",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Utilities for reporting the status of commands to a desktop notification service.",
+  "main": "out/ts/main.js",
+  "scripts": {
+    "start": "node out/ts/main.js"
+  },
+  "author": "",
+  "license": "Apache",
+  "dependencies": {
+    "node-notifier": "^10.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.14.0",
+    "@types/node-notifier": "^8.0.2",
+    "typescript": "^4.9.5"
+  }
+}
