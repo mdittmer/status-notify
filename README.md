@@ -1,12 +1,12 @@
 # Status Notify
 
-Tiny cross-platform desktop notification scripts.
+Tiny cross-platform desktop notification scripts implemented in TypeScript (targeting Node/NPM) and Bash.
 
 ## Example use case
 
 Suppose there are long-running tasks on `remote` machine, and you want to be notified when the complete on `local` desktop.
 
-The following will work with UNIX-like `remote` and `local` machines using `bash`, and needs to be adapted on other platforms.
+The following will work with UNIX-like `remote` and `local` machines using a `bash` shell, and needs to be adapted on other platforms.
 
 1. Check out this project on both machines;
 1. Build the TypeScript part of the project on `local`: `npm install && node_modules/.bin/tsc`;
