@@ -11,9 +11,11 @@ The following will work with UNIX-like `remote` and `local` machines using `bash
 1. Check out this project on both machines;
 1. Build the TypeScript part of the project on `local`: `npm install && node_modules/.bin/tsc`;
 1. On `remote`, create a status file (`$HOME/.status-notify` could be any path you choose): `printf "" > $HOME/.status-notify`;
-1. On `local`, run the notification server, piping the `remote` status file to its standard input: `node out/ts/main.js < <(ssh remote 'tail -f $HOME/.status-notify')`; in this command, you should replace `remote` with the hostname of the `remote` machine;
-1. On `remote`, run a command and report its status code via the status file: `asdf; /path/to/status-notify/gen-notification.sh $? "Status of asdf" "Completed attempt to run asdf"`.
-1. Observe the notification on `local`.
+1. On `local`, run the notification server, piping the `remote` status file to its standard input: `npm start < <(ssh remote 'tail -f $HOME/.status-notify')`; in this command, you should replace `remote` with the hostname of the `remote` machine;
+1. On `remote`, run a command and report its status code via the status file: `asdf; /path/to/status-notify/gen-notification.sh $? "Status of asdf" "Completed attempt to run asdf" >> $HOME/.status-notify`;
+1. Observe the notification on `local`; the notification will nag every `timeout_time + 10 seconds` until the user acts on it to clear it.
+
+You may wish to wrap the "run the notification server" and the "run a command and report its status" steps in a less verbose context such as a shell alias, function, or script.
 
 ## Image acknowledgements
 
