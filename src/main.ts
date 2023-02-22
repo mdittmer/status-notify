@@ -8,25 +8,37 @@ import {createInterface} from 'readline';
 import notifier from 'node-notifier';
 import {lstatSync} from 'fs';
 import {join, dirname} from 'path';
+import Os from 'os';
 
-const imagesDirectory = 'notify_icon_images';
-let baseImagesDirectory = __dirname;
-let actualImagesDirectory: string|null = null;
-for (let i = 0; i < 10; i++) {
-  try {
-    const dir = join(baseImagesDirectory, imagesDirectory);
-    const dirStat = lstatSync(dir);
-    if (dirStat.isDirectory()) {
-      actualImagesDirectory = dir;
-      break;
-    }
-  } catch (_error) {}
-  try {
-    baseImagesDirectory = dirname(baseImagesDirectory);
-  } catch (_error) {}
+const isMac = Os.platform() === 'darwin';
+
+function findDirectory(directoryName: string, opt_baseDirectory?: string|undefined) {
+  let baseDirectory = opt_baseDirectory || __dirname;
+  for (let i = 0; i < 10; i++) {
+    try {
+      const dir = join(baseDirectory, directoryName);
+      const dirStat = lstatSync(dir);
+      if (dirStat.isDirectory()) {
+        return dir;
+      }
+    } catch (_error) {}
+    try {
+      baseDirectory = dirname(baseDirectory);
+    } catch (_error) {}
+  }
+  return null;
 }
+
+const imagesDirectory = 'status-notify_icon_images';
+const actualImagesDirectory: string|null = findDirectory(imagesDirectory);
 if (actualImagesDirectory === null) {
   console.warn(`Failed to find "${imagesDirectory}" directory for icons`);
+}
+
+const soundsDirectory = 'status-notify_sounds';
+const actualSoundsDirectory: string|null = findDirectory(soundsDirectory);
+if (actualSoundsDirectory === null) {
+  console.warn(`Failed to find "${actualSoundsDirectory}" directory for sounds`);
 }
 
 const rl = createInterface({
@@ -43,11 +55,20 @@ rl.on('line', (line) => {
         join(`${actualImagesDirectory}`, 'success.png') :
         join(`${actualImagesDirectory}`, 'error.png')) :
       undefined;
+      const sound: boolean|string|undefined = isMac ?
+        (status === 0 ?
+          'Submarine' :
+          'Sosumi') :
+        (actualSoundsDirectory !== null ?
+          (status === 0 ?
+            join(`${actualSoundsDirectory}`, 'success.mp3') :
+            join(`${actualSoundsDirectory}`, 'error.wav')) :
+        undefined);
     const notification = {
       title,
       message, icon,
       contentImage: icon,
-      sound: true,
+      sound,
       wait: true,
     };
     const notify = () => {
