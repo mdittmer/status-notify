@@ -10,10 +10,12 @@ The following will work with UNIX-like `remote` and `local` machines using a `ba
 
 1. Check out this project on both machines;
 1. Build the TypeScript part of the project on `local`: `npm install && node_modules/.bin/tsc`;
-1. On `remote`, source the `.bashrc` script that contains the `status-notify` bash function: `source status-notify.bashrc` (really, something like this should be added to `remote`'s `~/.bashrc` file);
-1. On `local`, run the notification server, piping the `remote` a remote status file to its standard input: `ssh remote 'printf "" > $HOME/.status-notify'; ssh remote 'tail -f $HOME/.status-notify' | npm start`; in this command, you should replace `remote` with the hostname of the `remote` machine;
-1. On `remote`, run a command and report its status code via the status file: `asdf; status-notify >> $HOME/.status-notify`; this will hang, waiting for one character of input;
-1. Observe the notification on `local`; the notification will nag every 10 seconds for an hour, or until you enter one character of input in the `remote` shell that is running the `status-notify` bash function.
+1. On `remote`, source the `.bashrc` script that contains the `status-notify` bash function: `source status-notify.bashrc` (really, something like this should be added to `remote`'s `~/.bashrc` file to source the script in every shell during setup);
+1. On `local`, run the notification server, piping the `remote` a remote status file to its standard input: `watch-remote-status.sh remote`; in this command, you should replace the shell script argument, `remote`, with the hostname of the `remote` machine;
+1. On `remote`, run a command and report its status code via the status file: `asdf; nag-status`; this will hang, waiting for one character of input;
+1. Observe the notification on `local`; the notification will nag every 10 seconds for an hour, or until you enter one character of input in the `remote` shell that is running the `nag-status` bash function.
+
+If you are interested in additional helper functions or want to port this flow to another platform, read `status-notify.bashrc` and `src/main.ts` for pointers on how the `local`/`remote` dialogue works.
 
 ## Acknowledgements
 
