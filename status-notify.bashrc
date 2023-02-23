@@ -1,4 +1,8 @@
+# Copyright 2023 The Status Notify Authors. All rights reserved.
+# Use of this source code is governed by a Apache-style license that can be
+# found in the LICENSE file.
 
+export STATUS_NOTIFY_FILE="${STATUS_NOTIFY_FILE:-$HOME/.status-notify}"
 
 function read-char() {
   stty -icanon -echo
@@ -26,4 +30,16 @@ function status-notify () {
   local MESSAGE="${3:-command on ${HOSTNAME} complete}"
 
   status-notify-status "$STATUS" "$TITLE" "$MESSAGE"
+}
+
+function clear-status() {
+  printf "" > "${STATUS_NOTIFY_FILE}"
+}
+
+function nag-status () {
+  status-notify >> "${STATUS_NOTIFY_FILE}"
+}
+
+function clear-remote-status () {
+  ssh "$1" 'printf "" > "${STATUS_NOTIFY_FILE}"'
 }
