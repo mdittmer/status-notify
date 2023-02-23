@@ -4,4 +4,8 @@
 # Use of this source code is governed by a Apache-style license that can be
 # found in the LICENSE file.
 
-printf '{"status": '"$1"', "title": "'"$2"'", "message": "'"$3"'"}\n' >&1
+declare SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+source "$SCRIPT_DIR/status-notify.bashrc"
+
+status-notify-status "$1" "$2" "$3"

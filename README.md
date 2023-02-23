@@ -10,12 +10,10 @@ The following will work with UNIX-like `remote` and `local` machines using a `ba
 
 1. Check out this project on both machines;
 1. Build the TypeScript part of the project on `local`: `npm install && node_modules/.bin/tsc`;
-1. On `remote`, create a status file (`$HOME/.status-notify` could be any path you choose): `printf "" > $HOME/.status-notify`;
-1. On `local`, run the notification server, piping the `remote` status file to its standard input: `ssh remote 'tail -f $HOME/.status-notify' | npm start`; in this command, you should replace `remote` with the hostname of the `remote` machine;
-1. On `remote`, run a command and report its status code via the status file: `asdf; /path/to/status-notify/gen-notification.sh $? "Status of asdf" "Completed attempt to run asdf" >> $HOME/.status-notify`;
-1. Observe the notification on `local`; the notification will nag every `timeout_time + 10 seconds` until the user acts on it to clear it.
-
-You may wish to wrap the "run the notification server" and the "run a command and report its status" steps in a less verbose context such as a shell alias, function, or script.
+1. On `remote`, source the `.bashrc` script that contains the `status-notify` bash function: `source status-notify.bashrc` (really, something like this should be added to `remote`'s `~/.bashrc` file);
+1. On `local`, run the notification server, piping the `remote` a remote status file to its standard input: `ssh remote 'printf "" > $HOME/.status-notify'; ssh remote 'tail -f $HOME/.status-notify' | npm start`; in this command, you should replace `remote` with the hostname of the `remote` machine;
+1. On `remote`, run a command and report its status code via the status file: `asdf; status-notify >> $HOME/.status-notify`; this will hang, waiting for one character of input;
+1. Observe the notification on `local`; the notification will nag every 10 seconds for an hour, or until you enter one character of input in the `remote` shell that is running the `status-notify` bash function.
 
 ## Acknowledgements
 
@@ -26,5 +24,5 @@ The `success` and `error` images are used according to Creative Commons licenses
 
 The `success` and `error` sounds are licensed according ot Creative Commons licenses:
 
-- [Soft-Notifications - Bell - Ding-Dong](https://openverse.org/audio/c66607e4-8323-4d81-afd6-c0dbf06686e3) by LegitCheese, licensed for unmodified use under [CC0 1.0 Universal (CC0 1.0) Public Domain Dedication](https://creativecommons.org/publicdomain/zero/1.0/).
-- [Warning UI](https://openverse.org/audio/eb22504e-6178-430b-b927-21f5d685420e) by EminYILDIRIM, licensed for unmodified use under [Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
+- [Soft-Notifications - Bell - Ding-Dong](https://openverse.org/audio/b46209de-f7ff-4514-b228-c36aa3b14c16) by ironcross32, licensed for unmodified use under [CC0 1.0 Universal (CC0 1.0) Public Domain Dedication](https://creativecommons.org/publicdomain/zero/1.0/).
+- [Sci-Fi Alert 07.wav](https://openverse.org/audio/f79594de-5b12-4783-a1c1-a2986a6621a8) by Glitchedtones, licensed for unmodified use under [CC0 1.0 Universal (CC0 1.0) Public Domain Dedication](https://creativecommons.org/publicdomain/zero/1.0/).
